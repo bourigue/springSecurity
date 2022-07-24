@@ -41,7 +41,10 @@ void addRoleToUser(@RequestBody RoleToUser roleToUser){
          accountServices.addRoleToUser(roleToUser.username,roleToUser.rolename);
     }
 
-
+    @GetMapping(path = "/hhhh")
+    User byuseranme(){
+        return accountServices.loadUserByUserneme("rachidrachid");
+    }
 }
 @Data
 class RoleToUser{
