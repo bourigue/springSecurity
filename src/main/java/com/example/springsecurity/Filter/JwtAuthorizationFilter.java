@@ -22,7 +22,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorizationToken=request.getHeader("Authorization");
-        if(authorizationToken!=null && authorizationToken.startsWith("Bearer")){
+
+        if(request.getServletPath().equals( "/refreshToken")){
+            filterChain.doFilter(request,response);
+        }else{
+            if(authorizationToken!=null && authorizationToken.startsWith("Bearer")){
             try{
 
                 String jwt=authorizationToken.substring(7);
@@ -45,5 +49,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }else {
 
             filterChain.doFilter(request,response);
-   }
+   }}
+
+
+
+
+
 }}
