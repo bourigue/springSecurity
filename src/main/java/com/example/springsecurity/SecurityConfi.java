@@ -58,7 +58,7 @@ public class SecurityConfi extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.headers().frameOptions().disable();
-       http.authorizeRequests().antMatchers( "*/refreshToken/**").permitAll();
+       http.authorizeRequests().antMatchers( "/refreshToken").permitAll();
       //  http.formLogin();
      //   http.authorizeRequests().antMatchers(HttpMethod.POST,"/users/**").hasAuthority("admin");
      //   http.authorizeRequests().antMatchers(HttpMethod.GET,"/users/**").hasAuthority("user");

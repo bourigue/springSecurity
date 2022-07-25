@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -63,7 +64,7 @@ void addRoleToUser(@RequestBody RoleToUser roleToUser){
  public void refresheToken(HttpServletRequest request, HttpServletResponse response) throws Exception{
 
      String auhToken=request.getHeader("Authorization");
-     if(auhToken!=null && auhToken.startsWith("Bearer")){
+     if(auhToken!=null && auhToken.startsWith("Bearer ")){
          try{
              String jwt=auhToken.substring(7);
              Algorithm algorithm=Algorithm.HMAC256("mySecret1234");
@@ -75,7 +76,7 @@ void addRoleToUser(@RequestBody RoleToUser roleToUser){
              Algorithm algol=Algorithm.HMAC256("mySecret1234");
              String jwtAccessToken= JWT.create()
                      .withSubject(user.getName())
-                     .withExpiresAt(new Date(System.currentTimeMillis()+5*60*1000))
+                     .withExpiresAt(new Date(System.currentTimeMillis()+1*60*1000))
                      .withIssuer(request.getRequestURL().toString())
                      .withClaim("roles",user.getUseroles().stream().map(r->r.getRolename()).collect(Collectors.toList()))
                      .sign(algol);
@@ -96,6 +97,11 @@ void addRoleToUser(@RequestBody RoleToUser roleToUser){
 
          throw new RuntimeException("Rfersh token required !!!");
      }
+
+ }
+@GetMapping("/profile")
+ public  User profile(Principal principal){
+return  accountServices.loadUserByUserneme(principal.getName());
 
  }
 
