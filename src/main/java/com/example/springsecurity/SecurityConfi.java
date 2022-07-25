@@ -1,8 +1,8 @@
 package com.example.springsecurity;
 
 
-import com.example.springsecurity.Controller.Filter.JwtAuthenticationFilter;
-import com.example.springsecurity.Controller.Filter.JwtAuthorizationFilter;
+import com.example.springsecurity.Filter.JwtAuthenticationFilter;
+import com.example.springsecurity.Filter.JwtAuthorizationFilter;
 import com.example.springsecurity.Entites.User;
 import com.example.springsecurity.Services.AccountServicesImpl;
 import org.springframework.context.annotation.Bean;
@@ -60,9 +60,9 @@ public class SecurityConfi extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
       //  http.authorizeRequests().antMatchers("/users").permitAll();
       //  http.formLogin();
-        http.authorizeRequests().antMatchers(HttpMethod.POST,"/users/**").hasAuthority("admin");
-        http.authorizeRequests().antMatchers(HttpMethod.GET,"/users/**").hasAuthority("user");
-        http.authorizeRequests().antMatchers(HttpMethod.GET,"/users/**").hasAuthority("admin");
+     //   http.authorizeRequests().antMatchers(HttpMethod.POST,"/users/**").hasAuthority("admin");
+     //   http.authorizeRequests().antMatchers(HttpMethod.GET,"/users/**").hasAuthority("user");
+     //   http.authorizeRequests().antMatchers(HttpMethod.GET,"/users/**").hasAuthority("admin");
 
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(new JwtAuthenticationFilter(authenticationManagerBean()));

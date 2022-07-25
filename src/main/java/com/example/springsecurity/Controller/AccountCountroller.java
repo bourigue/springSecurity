@@ -6,11 +6,13 @@ import com.example.springsecurity.Repositories.UserRepository;
 import com.example.springsecurity.Services.AccountServicesImpl;
 import lombok.Data;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+
 public class AccountCountroller {
 
     private UserRepository userRepository;
@@ -22,6 +24,7 @@ public class AccountCountroller {
     }
 
 @GetMapping(path="/users")
+@PostAuthorize("hasAuthority('user')")
 List<User> listuser(){
 return  accountServices.listuser();
 }

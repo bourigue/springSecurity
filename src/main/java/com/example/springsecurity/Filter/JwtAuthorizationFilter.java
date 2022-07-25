@@ -1,4 +1,4 @@
-package com.example.springsecurity.Controller.Filter;
+package com.example.springsecurity.Filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
