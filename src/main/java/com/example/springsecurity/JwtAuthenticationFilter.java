@@ -1,5 +1,8 @@
 package com.example.springsecurity;
 
+import antlr.ASTFactory;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,9 +16,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.PasswordAuthentication;
+import java.util.Date;
+import java.util.stream.Collectors;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
- private AuthenticationManager authenticationManager;
+
+    private AuthenticationManager authenticationManager;
 
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
@@ -40,6 +46,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         System.out.println("successfulAuthentication");
         User user=(User)authResult.getPrincipal();
+
+        Algorithm algol=Algorithm.HMAC256("mySecret1234");
+        String jwtAccessToken= JWT.create()
+                .withSubject(user.getUsername())
+                .withExpiresAt(new Date(System.currentTimeMillis()+5*60*1000))
+                .withIssuer(request.getRequestURL().toString())
+                .withClaim("roles",user.getAuthorities().stream().map(ga->ga.getAuthority()).collect(Collectors.toList()))
+                .sign(algol);
+
+
+
         super.successfulAuthentication(request, response, chain, authResult);
     }
 }
