@@ -7,6 +7,7 @@ import com.example.springsecurity.Entites.User;
 import com.example.springsecurity.Services.AccountServicesImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -55,13 +56,16 @@ public class SecurityConfi extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.headers().frameOptions().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.headers().frameOptions().disable();
       //  http.authorizeRequests().antMatchers("/users").permitAll();
       //  http.formLogin();
-        http.addFilter(new JwtAuthenticationFilter(authenticationManagerBean()));
-        http.authorizeRequests().anyRequest().authenticated();
+        http.authorizeRequests().antMatchers(HttpMethod.POST,"/users/**").hasAuthority("admin");
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/users/**").hasAuthority("user");
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/users/**").hasAuthority("admin");
 
+        http.authorizeRequests().anyRequest().authenticated();
+        http.addFilter(new JwtAuthenticationFilter(authenticationManagerBean()));
         http.addFilterBefore(new JwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
     @Bean
